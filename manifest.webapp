@@ -1,5 +1,5 @@
 {
-"version": "1.0.0",
+"version": "1.0.1",
 "name": "Nokia 8000 Camera",
 "description": "Camera for Nokia 8000 with manual control.",
 "type": "privileged",
