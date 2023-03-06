@@ -12,6 +12,7 @@ function onSuccess(cameraObj) {
 	cameraPreviewStream.srcObject = cameraControl; //Set camera view
 	cameraControl.pictureQuality = 1; //Set quality to max
 	cameraControl.setMeteringAreas([null]);
+	setCameraPreviewRotation();
 	initializeCameraSettings();
 }
 
@@ -30,4 +31,9 @@ function applySetting(item) {
 
 function onError(error) { //Used as default error function
 	console.warn(error);
+}
+
+function setCameraPreviewRotation() { //Overrides the default css transform value of 270
+	let angle = cameraControl.sensorAngle + "deg";
+	cameraPreviewStream.style.transform = `rotate(${angle})`;
 }
