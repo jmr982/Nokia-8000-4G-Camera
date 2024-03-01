@@ -2,28 +2,30 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="./style.css">
-    <script src="./app/setup.js" defer></script>
-    <script src="./app/main.js" defer></script>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app/functions.js" defer></script>
+  <script src="./app/setup.js" defer></script>
+  <script src="./app/main.js" defer></script>
 </head>
 
 <body>
-    <div id="overlay">
-        <div id="menu">
-            <div class="menu-container">
-                <div class="menu-item" id="key"></div>
-                <div class="menu-item" id="value"></div>
-            </div>
-        </div>
-        <div id="buttons">
-            <div id="buttons-container">
-                <div class="button-text" id="settings">Settings</div>
-                <div class="button-text" id="exposure">0.00</div>
-                <div class="button-text"></div>
-            </div>
-        </div>
+  <div id="overlay">
+    <div id="menu">
+      <div class="menu-container">
+        <div class="menu-item" id="key"></div>
+        <div class="menu-item" id="value"></div>
+      </div>
     </div>
-    <video autoplay="true" id="camera-preview-stream" width="320" height="240"></video>
+      <div id="buttons">
+        <div id="buttons-container">
+          <div class="button-text" id="settings">Settings</div>
+          <div class="button-text" id="exposure">0.00</div>
+          <div class="button-text"></div>
+        </div>
+      </div>
+  </div>
+  <video autoplay="true" id="camera-preview-stream" width="320" height="240">
+  </video>
 </body>
 
 </html>
