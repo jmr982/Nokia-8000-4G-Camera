@@ -1,84 +1,65 @@
-document.addEventListener("keypress", keypressed);
+// The camera 'main' loop.
+document.addEventListener('keypress', main);
 
-function keypressed(event) {
-	const menu = document.getElementById("menu");
-
-	if (event.key == "SoftLeft") { onToggleMenu(menu); }
-
-	if (menu.style.display == "block") { //Scroll menu and set value
-		let item = menuItems[localStorage.getItem("menuKey")];
-		switch (event.key) {
-			case "ArrowRight":
-				setLocalStorageValue("menuKey");
-				break;
-			case "ArrowLeft":
-				setLocalStorageValue("menuKey", "subtract");
-				break;
-			case "ArrowDown":
-				setLocalStorageValue(item);
-				break;
-			case "ArrowUp":
-				setLocalStorageValue(item, "subtract");
-				break;
+/*
+  This function performs an action based on the key pressed. Accepts as an 
+  argument the keypress event. It applies changes to the camera settings, 
+  updates the view, takes the photo, and exits the program. The 'SoftLeft' 
+  button opens and closes the menu. 'Enter' takes the photo. The 'Arrow' keys 
+  are used for setting the exposure, navigating the menu, and changing camera 
+  settings. Functionality depends on whether the menu is visible or not. 
+*/
+function main (event) {
+  let menuOpen = menu.style.display == 'block';
+  let menuItem = menuItems[menuIndex];
+	
+  switch (event.key) {
+    case 'SoftLeft':
+      menuOpen = toggleMenu();
+      break;
+    case 'Enter': 
+      takePhoto();
+      break;
+    case 'Backspace': 
+      cameraControl.release();
+      window.close();
+      break;
+    case 'ArrowRight': 
+			menuOpen ? 
+      menuIndex = incrementIndex(menuIndex, menuItems.length) : 
+      cameraControl.exposureCompensation += 
+      cameraControl.capabilities.exposureCompensationStep;
+      break;
+    case 'ArrowLeft':  
+      menuOpen ?
+      menuIndex = decrementIndex(menuIndex, menuItems.length) :
+      cameraControl.exposureCompensation -= 
+      cameraControl.capabilities.exposureCompensationStep;
+      break;
+    case 'ArrowDown':
+      if (menuOpen) { 
+        let index = incrementIndex(
+          localStorage.getItem(menuItem), 
+          cameraControl.capabilities[menuItem].length
+        );
+        localStorage.setItem(menuItem, index);
+      }
+      break;
+		case 'ArrowUp':
+      if (menuOpen) { 
+        let index = decrementIndex(
+          localStorage.getItem(menuItem), 
+          cameraControl.capabilities[menuItem].length
+        );
+        localStorage.setItem(menuItem, index);
+      }
+      break;
 		}
-		applySetting(item); //Update cameraControl with new setting. applySetting lcated in setup.js
-		updateMenu(); //Draw updateted values to screen
-	} else {
-		switch (event.key) {
-			case "Enter": //Take photo
-				onTakePhoto();
-				break;
-			case "Backspace": //Close camera (this might not work?)
-				cameraControl.release();
-				window.close();
-				break;
-			case "ArrowRight": //Set exposure +
-				cameraControl.exposureCompensation += cameraControl.capabilities.exposureCompensationStep;
-				break;
-			case "ArrowLeft": //Set exposure -
-				cameraControl.exposureCompensation -= cameraControl.capabilities.exposureCompensationStep;
-				break;
-		}
-		document.getElementById("exposure").textContent = cameraControl.exposureCompensation.toFixed(2);
-	}
-}
-
-function onToggleMenu(menu) {
-	if (menu.style.display != "block") {
-		menu.style.display = "block"; //Show menu
-		document.getElementById("settings").textContent = "Close" //Change button text
-	} else if (menu.style.display == "block") {
-		menu.style.display = "none"; //Hide menu
-		document.getElementById("settings").textContent = "Settings"
-	}
-}
-
-function setLocalStorageValue(item, direction) {
-	let length = item == "menuKey" ? menuItems.length : cameraControl.capabilities[menuItems[localStorage.getItem("menuKey")]].length;
-	let index = parseInt(localStorage.getItem(item));
-	index = direction == "subtract" ? (index > 0 ? index - 1 : (length - 1)) : (index < (length - 1) ? (index + 1) : 0);
-	localStorage.setItem(item, index);
-}
-
-function updateMenu() { //Update menu using localStorage and cameraControl values
-	let item = menuItems[localStorage.getItem("menuKey")];
-	let value = cameraControl.capabilities[item][localStorage.getItem(item)];
-	item = item.replace(/Modes|[A-Z]/g, (r) => { return r == "Modes" ? "" : " " + r; }).toUpperCase(); //Format text
-	document.getElementById("key").textContent = `${item}`;
-	document.getElementById("value").textContent = `${value}`;
-}
-
-function onTakePhoto() {
-	let photoOptions = {
-		pictureSize: cameraControl.capabilities.pictureSizes[0], //For Nokia 8000 sets size to 1200 * 1600
-		fileFormat: cameraControl.capabilities.fileFormats[0] //Sets format to jpeg
-	}
-	cameraControl.takePicture(photoOptions).then(onPhotoTaken, onError); //onError located in setup.js
-}
-
-function onPhotoTaken(blob) { //Saves the photo to storage device
-	let location = "others";
-	let timeStamp = Date.now().toString();
-	storage.addNamed(blob, `${location}/${timeStamp}.jpg`);
-	cameraControl.resumePreview();
+	
+  if (menuOpen) {
+    applySetting(menuItem);
+    updateMenu();
+  } else {
+    exposure.textContent = cameraControl.exposureCompensation.toFixed(2);
+  }
 }
