@@ -11,12 +11,12 @@ const menuKey = document.getElementById('key');
 const menuValue = document.getElementById('value');
 
 const menuItems = [
-	'effects', 
-	'flashModes', 
-	'isoModes', 
-	'meteringModes', 
-	'sceneModes', 
-	'whiteBalanceModes'
+  'effects', 
+  'flashModes', 
+  'isoModes', 
+  'meteringModes', 
+  'sceneModes', 
+  'whiteBalanceModes'
 ];
 
 // Variable used to navigate the settings menu and select items from menuItems. 
@@ -32,28 +32,28 @@ let cameraControl = null;
 const camera = navigator.mozCameras.getListOfCameras()[0];
 
 /* 
-	Initialize the camera and perform setup. Accepts as function arguments setup 
-	and error.
+  Initialize the camera and perform setup. Accepts as function arguments setup 
+  and error.
 */
-	navigator.mozCameras.getCamera(camera).then(setup, error);
+navigator.mozCameras.getCamera(camera).then(setup, error);
 
 /*
   This function initializes the camera and performs setup. Accepts as an 
-	argument the camera object. Reads stored settings from localStorage and 
-	applies them. If no settings are available (first launch), sets (setItem) 
-	the values to 0. 
+  argument the camera object. Reads stored settings from localStorage and 
+  applies them. If no settings are available (first launch), sets (setItem) 
+  the values to 0. 
 */
 function setup(cameraObj) {
-	cameraControl = cameraObj.camera;
-	cameraPreviewStream.srcObject = cameraControl;
+  cameraControl = cameraObj.camera; 
+  cameraPreviewStream.srcObject = cameraControl;
   // Set picture quality to best quality.
   cameraControl.pictureQuality = 1;
   cameraControl.setMeteringAreas([null]);
 
   for (let item of menuItems) {
-		if (!localStorage.getItem(item)) { localStorage.setItem(item, 0); }
-		applySetting(item);
-	}	
+    if (!localStorage.getItem(item)) { localStorage.setItem(item, 0); }
+    applySetting(item);
+  }	
   
   setCameraPreviewRotation();
 }
