@@ -9,8 +9,8 @@ function error(error) {
   localStorage. 
 */
 function applySetting(item) {
-	let setting = item.slice(0, item.length - 1);
-	cameraControl[setting] = 
+  let setting = item.slice(0, item.length - 1);
+  cameraControl[setting] = 
     cameraControl.capabilities[item][localStorage.getItem(item)];
 }
 
@@ -84,9 +84,9 @@ function updateMenu() {
   let item = menuItems[menuIndex];
   let value = cameraControl.capabilities[item][localStorage.getItem(item)];
   item = item.replace(
-		/Modes|[A-Z]/g, 
-		(r) => { return r == 'Modes' ? '' : ' ' + r; }
-		).toUpperCase();
+    /Modes|[A-Z]/g, 
+    (r) => { return r == 'Modes' ? '' : ' ' + r; }
+    ).toUpperCase();
   menuKey.textContent = `${item}`;
   menuValue.textContent = `${value}`;
 }
