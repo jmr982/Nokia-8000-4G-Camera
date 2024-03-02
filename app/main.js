@@ -25,39 +25,39 @@ function main (event) {
       window.close();
       break;
     case 'ArrowRight': 
-			menuOpen ? 
+      menuOpen ? 
       menuIndex = incrementIndex(menuIndex, menuItems.length) : 
       cameraControl.exposureCompensation += 
       cameraControl.capabilities.exposureCompensationStep;
       break;
-    case 'ArrowLeft':  
-      menuOpen ?
-      menuIndex = decrementIndex(menuIndex, menuItems.length) :
+    case 'ArrowLeft': 
+      menuOpen ? 
+      menuIndex = decrementIndex(menuIndex, menuItems.length) : 
       cameraControl.exposureCompensation -= 
       cameraControl.capabilities.exposureCompensationStep;
       break;
-    case 'ArrowDown':
+    case 'ArrowDown': 
       if (menuOpen) { 
         let index = incrementIndex(
           localStorage.getItem(menuItem), 
           cameraControl.capabilities[menuItem].length
-        );
+        ); 
         localStorage.setItem(menuItem, index);
       }
-      break;
-		case 'ArrowUp':
+      break; 
+    case 'ArrowUp': 
       if (menuOpen) { 
-        let index = decrementIndex(
+        let index = decrementIndex( 
           localStorage.getItem(menuItem), 
           cameraControl.capabilities[menuItem].length
         );
         localStorage.setItem(menuItem, index);
       }
       break;
-		}
-	
+  }
+  
   if (menuOpen) {
-    applySetting(menuItem);
+    applySetting(menuItem); 
     updateMenu();
   } else {
     exposure.textContent = cameraControl.exposureCompensation.toFixed(2);
